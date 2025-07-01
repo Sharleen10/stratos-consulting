@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Users, Calendar, CheckCircle, AlertCircle, BarChart3, User, LogOut, Search, TrendingUp, Clock, Target, Home, ClipboardList, MessageSquare } from 'lucide-react';
+import { Plus, Users, Calendar, CheckCircle, AlertCircle, User, LogOut, Search, TrendingUp, Clock, Target, ClipboardList, MessageSquare } from 'lucide-react';
 
 // Initial mock data with enhanced user profiles
 const initialUsers = [
