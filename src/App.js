@@ -153,9 +153,10 @@ const App = () => {
 
   // Load analysis history on component mount
   useEffect(() => {
-    const savedHistory = JSON.parse(localStorage.getItem('analysisHistory') || []);
+    const savedHistory = localStorage.getItem('analysisHistory');
+    const parsedHistory = savedHistory ? JSON.parse(savedHistory) : [];
     if (currentUser) {
-      setAnalysisHistory(savedHistory.filter(item => item.userId === currentUser.id));
+      setAnalysisHistory(parsedHistory.filter(item => item.userId === currentUser.id));
     }
   }, [currentUser]);
 
@@ -287,8 +288,9 @@ const App = () => {
         setShowLogin(false);
         
         // Load user-specific analysis history
-        const savedHistory = JSON.parse(localStorage.getItem('analysisHistory') || []);
-        setAnalysisHistory(savedHistory.filter(item => item.userId === user.id));
+        const savedHistory = localStorage.getItem('analysisHistory');
+        const parsedHistory = savedHistory ? JSON.parse(savedHistory) : [];
+        setAnalysisHistory(parsedHistory.filter(item => item.userId === user.id));
       } else {
         alert('Invalid email or password');
       }
@@ -816,7 +818,8 @@ const App = () => {
     setIsAnalyzing(false);
     
     // Save to analysis history
-    const history = JSON.parse(localStorage.getItem('analysisHistory') || []);
+    const savedHistory = localStorage.getItem('analysisHistory');
+    const history = savedHistory ? JSON.parse(savedHistory) : [];
     history.unshift({
       userId: user.id,
       timestamp: new Date().toISOString(),
