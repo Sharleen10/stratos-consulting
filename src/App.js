@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Users, Calendar, CheckCircle, AlertCircle, User, LogOut, Search, TrendingUp, Clock, Target, ClipboardList, MessageSquare } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Plus, Users, Calendar, CheckCircle, AlertCircle, User, LogOut, Search, TrendingUp, Clock, Target, ClipboardList, MessageSquare, Upload } from 'lucide-react';
 
 // Initial mock data with enhanced user profiles
 const initialUsers = [
@@ -520,7 +520,7 @@ const App = () => {
                 type="text"
                 value={newProject.name}
                 onChange={(e) => setNewProject({...newProject, name: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -529,7 +529,7 @@ const App = () => {
               <textarea
                 value={newProject.description}
                 onChange={(e) => setNewProject({...newProject, description: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 rows="3"
               />
             </div>
@@ -538,7 +538,7 @@ const App = () => {
               <select
                 value={newProject.status}
                 onChange={(e) => setNewProject({...newProject, status: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
@@ -551,7 +551,7 @@ const App = () => {
                 type="date"
                 value={newProject.dueDate}
                 onChange={(e) => setNewProject({...newProject, dueDate: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
             <div>
@@ -564,7 +564,7 @@ const App = () => {
                   const values = options.map(opt => parseInt(opt.value));
                   setNewProject({...newProject, teamMembers: values});
                 }}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
                 {users.filter(u => u.role === 'Team Member').map(user => (
                   <option key={user.id} value={user.id}>{user.name}</option>
@@ -639,7 +639,7 @@ const App = () => {
               <select
                 value={newTask.projectId}
                 onChange={(e) => setNewTask({...newTask, projectId: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 required
               >
                 <option value="">Select Project</option>
@@ -654,7 +654,7 @@ const App = () => {
                 type="text"
                 value={newTask.name}
                 onChange={(e) => setNewTask({...newTask, name: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -663,7 +663,7 @@ const App = () => {
               <textarea
                 value={newTask.description}
                 onChange={(e) => setNewTask({...newTask, description: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 rows="3"
               />
             </div>
@@ -672,7 +672,7 @@ const App = () => {
               <select
                 value={newTask.status}
                 onChange={(e) => setNewTask({...newTask, status: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
@@ -686,7 +686,7 @@ const App = () => {
                 type="date"
                 value={newTask.dueDate}
                 onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
             <div>
@@ -694,7 +694,7 @@ const App = () => {
               <select
                 value={newTask.assignedTo}
                 onChange={(e) => setNewTask({...newTask, assignedTo: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="">Select Team Member</option>
                 {users.filter(u => u.role === 'Team Member').map(user => (
@@ -1023,6 +1023,13 @@ const App = () => {
   const Projects = () => {
     const visibleProjects = getVisibleProjects();
     
+    const handleStatusChange = (projectId, newStatus) => {
+      const updatedProjects = projects.map(project => 
+        project.id === projectId ? { ...project, status: newStatus } : project
+      );
+      setProjects(updatedProjects);
+    };
+
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -1041,13 +1048,19 @@ const App = () => {
             <div key={project.id} className="bg-white p-6 rounded-lg shadow-sm border">
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                  project.status === 'Done' ? 'bg-green-100 text-green-800' :
-                  project.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}>
-                  {project.status}
-                </span>
+                <select
+                  value={project.status}
+                  onChange={(e) => handleStatusChange(project.id, e.target.value)}
+                  className={`px-2 py-1 text-xs rounded-full ${
+                    project.status === 'Done' ? 'bg-green-100 text-green-800' :
+                    project.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}
+                >
+                  <option value="To Do">To Do</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Done">Done</option>
+                </select>
               </div>
               
               <p className="text-gray-600 mb-4">{project.description}</p>
@@ -1143,7 +1156,38 @@ const App = () => {
   // AI Insights Component
   const AIInsights = () => {
     const [inputText, setInputText] = useState('');
+    const [uploadedFile, setUploadedFile] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef(null);
     const visibleProjects = getVisibleProjects();
+
+    const handleFileUpload = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      setIsUploading(true);
+      setUploadedFile(file);
+
+      // Simulate file reading and text extraction
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // In a real app, you would parse the file content properly
+        // For demo purposes, we'll just use the file name and some mock text
+        const fileContent = `Document: ${file.name}\n\nSample extracted text from ${file.name}:\n\nThis is a simulated extraction of text from the uploaded document. In a real application, this would contain the actual content of the file.`;
+        
+        setInputText(fileContent);
+        setIsUploading(false);
+      };
+      reader.onerror = () => {
+        setIsUploading(false);
+        alert('Error reading file');
+      };
+      
+      // Simulate processing delay
+      setTimeout(() => {
+        reader.readAsText(file);
+      }, 1000);
+    };
 
     const sampleText = `Client Meeting Notes - June 30, 2025
 
@@ -1188,27 +1232,43 @@ Overall, client is concerned but willing to work together on solutions.`;
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Paste your text here or click 'Load Sample' to see a demo..."
+              placeholder="Paste your text here or upload a document..."
               className="w-full h-40 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           
-          <div className="flex space-x-3 mb-6">
+          <div className="flex flex-wrap gap-3 mb-6">
             <button
               onClick={() => setInputText(sampleText)}
               className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50"
             >
               Load Sample Text
             </button>
+            
+            <button
+              onClick={() => fileInputRef.current.click()}
+              className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 flex items-center space-x-2"
+            >
+              <Upload className="w-4 h-4" />
+              <span>{uploadedFile ? uploadedFile.name : 'Upload Document'}</span>
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              accept=".txt,.pdf,.doc,.docx"
+              className="hidden"
+            />
+            
             <button
               onClick={() => analyzeText(inputText)}
-              disabled={!inputText.trim() || isAnalyzing}
+              disabled={!inputText.trim() || isAnalyzing || isUploading}
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
-              {isAnalyzing ? (
+              {isAnalyzing || isUploading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Analyzing...</span>
+                  <span>{isUploading ? 'Processing...' : 'Analyzing...'}</span>
                 </>
               ) : (
                 <>
