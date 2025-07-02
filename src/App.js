@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Users, Calendar, CheckCircle, AlertCircle, User, LogOut, Search, TrendingUp, Clock, Target, ClipboardList, MessageSquare, Upload } from 'lucide-react';
+import { Plus, Users, Calendar, CheckCircle, AlertCircle, User, LogOut, Search, TrendingUp, Clock, Target, ClipboardList, MessageSquare, Upload, Edit, Trash2 } from 'lucide-react';
+import STRATOSLOGO from './STRATOSLOGO.jpg';
 
 // Initial mock data with enhanced user profiles
 const initialUsers = [
@@ -132,13 +133,6 @@ const App = () => {
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [signupRole, setSignupRole] = useState('Team Member');
-  const [newProject, setNewProject] = useState({
-    name: '',
-    description: '',
-    status: 'To Do',
-    dueDate: '',
-    teamMembers: []
-  });
   const [newTask, setNewTask] = useState({
     name: '',
     description: '',
@@ -150,6 +144,7 @@ const App = () => {
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [analysisHistory, setAnalysisHistory] = useState([]);
+  const [editingProject, setEditingProject] = useState(null);
 
   // Load analysis history on component mount
   useEffect(() => {
@@ -184,26 +179,24 @@ const App = () => {
   // Landing Page Component
   const LandingPage = () => {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-teal-100">
         <nav className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center space-x-2">
-                <div className="bg-indigo-600 w-8 h-8 rounded-lg flex items-center justify-center">
-                  <Target className="w-5 h-5 text-white" />
-                </div>
-                <h1 className="text-xl font-bold text-gray-900">StratOS Consulting Platform</h1>
+                <img src={STRATOSLOGO} alt="StratOS Logo" className="h-8 w-auto" />
+                <h1 className="text-xl font-bold text-teal-800">StratOS Consulting Platform</h1>
               </div>
               <div className="flex space-x-4">
                 <button 
                   onClick={() => { setShowLanding(false); setShowLogin(true); }}
-                  className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50"
+                  className="px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-50"
                 >
                   Login
                 </button>
                 <button 
                   onClick={() => { setShowLanding(false); setShowSignup(true); }}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
                 >
                   Sign Up
                 </button>
@@ -214,20 +207,21 @@ const App = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-6">Transform Your Consulting Workflow</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            <img src={STRATOSLOGO} alt="StratOS Logo" className="h-24 w-auto mx-auto mb-6" />
+            <h1 className="text-4xl font-bold text-teal-800 mb-6">Transform Your Consulting Workflow</h1>
+            <p className="text-xl text-teal-700 max-w-3xl mx-auto mb-8">
               StratOS combines powerful task management with AI-driven insights to help consulting teams work smarter and deliver better results.
             </p>
             <div className="flex justify-center space-x-4">
               <button 
                 onClick={() => { setShowLanding(false); setShowSignup(true); }}
-                className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-lg"
+                className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 text-lg"
               >
                 Get Started
               </button>
               <button 
                 onClick={() => { setShowLanding(false); setShowLogin(true); }}
-                className="px-6 py-3 text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 text-lg"
+                className="px-6 py-3 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-50 text-lg"
               >
                 Demo the Platform
               </button>
@@ -237,32 +231,32 @@ const App = () => {
 
         <div className="bg-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Key Features</h2>
+            <h2 className="text-3xl font-bold text-center text-teal-800 mb-12">Key Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-blue-50 p-6 rounded-xl">
-                <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                  <ClipboardList className="w-6 h-6 text-blue-600" />
+              <div className="bg-cyan-50 p-6 rounded-xl border border-cyan-100">
+                <div className="bg-cyan-500 p-3 rounded-lg">
+                  <ClipboardList className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Project Management</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-semibold text-teal-800 mb-2">Project Management</h3>
+                <p className="text-teal-700">
                   Organize projects, assign tasks, and track progress with intuitive dashboards and reporting.
                 </p>
               </div>
-              <div className="bg-purple-50 p-6 rounded-xl">
-                <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                  <MessageSquare className="w-6 h-6 text-purple-600" />
+              <div className="bg-purple-50 p-6 rounded-xl border border-purple-100">
+                <div className="bg-purple-500 p-3 rounded-lg">
+                  <MessageSquare className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">AI-Powered Insights</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-semibold text-teal-800 mb-2">AI-Powered Insights</h3>
+                <p className="text-teal-700">
                   Extract key insights, action items, and sentiment analysis from client meetings and feedback.
                 </p>
               </div>
-              <div className="bg-green-50 p-6 rounded-xl">
-                <div className="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                  <Users className="w-6 h-6 text-green-600" />
+              <div className="bg-emerald-50 p-6 rounded-xl border border-emerald-100">
+                <div className="bg-emerald-500 p-3 rounded-lg">
+                  <Users className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Team Collaboration</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-semibold text-teal-800 mb-2">Team Collaboration</h3>
+                <p className="text-teal-700">
                   Role-based access ensures the right people have the right information at the right time.
                 </p>
               </div>
@@ -270,8 +264,8 @@ const App = () => {
           </div>
         </div>
 
-        <footer className="bg-gray-50 py-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+        <footer className="bg-teal-50 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-teal-600 text-sm">
             <p>© 2025 StratOS Consulting Platform. All rights reserved.</p>
           </div>
         </footer>
@@ -297,55 +291,53 @@ const App = () => {
     };
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-teal-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="bg-indigo-600 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Target className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">StratOS Consulting Platform</h1>
-            <p className="text-gray-600">Sign in to your account</p>
+            <img src={STRATOSLOGO} alt="StratOS Logo" className="h-16 w-auto mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-teal-800 mb-2">StratOS Consulting Platform</h1>
+            <p className="text-teal-600">Sign in to your account</p>
           </div>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Email</label>
               <input
                 type="email"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 placeholder="your@email.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Password</label>
               <input
                 type="password"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 placeholder="••••••••"
               />
             </div>
             <button
               onClick={handleLogin}
-              className="w-full py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
             >
               Sign In
             </button>
-            <p className="text-center text-sm text-gray-600">
+            <p className="text-center text-sm text-teal-600">
               Don't have an account?{' '}
               <button 
                 onClick={() => { setShowLogin(false); setShowSignup(true); }}
-                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                className="text-teal-700 hover:text-teal-900 font-medium"
               >
                 Sign up
               </button>
             </p>
             <button
               onClick={() => { setShowLogin(false); setShowLanding(true); }}
-              className="w-full py-2 text-gray-600 hover:text-gray-800 text-sm"
+              className="w-full py-2 text-teal-600 hover:text-teal-800 text-sm"
             >
               ← Back to home
             </button>
@@ -394,53 +386,51 @@ const App = () => {
     };
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-teal-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="bg-indigo-600 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Target className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Create your account</h1>
-            <p className="text-gray-600">Get started with StratOS Consulting Platform</p>
+            <img src={STRATOSLOGO} alt="StratOS Logo" className="h-16 w-auto mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-teal-800 mb-2">Create your account</h1>
+            <p className="text-teal-600">Get started with StratOS Consulting Platform</p>
           </div>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Full Name</label>
               <input
                 type="text"
                 value={signupName}
                 onChange={(e) => setSignupName(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 placeholder="John Doe"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Email</label>
               <input
                 type="email"
                 value={signupEmail}
                 onChange={(e) => setSignupEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 placeholder="your@email.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Password</label>
               <input
                 type="password"
                 value={signupPassword}
                 onChange={(e) => setSignupPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 placeholder="••••••••"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Role</label>
               <select
                 value={signupRole}
                 onChange={(e) => setSignupRole(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               >
                 <option value="Team Member">Team Member</option>
                 <option value="Manager">Manager</option>
@@ -448,22 +438,22 @@ const App = () => {
             </div>
             <button
               onClick={handleSignup}
-              className="w-full py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
             >
               Create Account
             </button>
-            <p className="text-center text-sm text-gray-600">
+            <p className="text-center text-sm text-teal-600">
               Already have an account?{' '}
               <button 
                 onClick={() => { setShowSignup(false); setShowLogin(true); }}
-                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                className="text-teal-700 hover:text-teal-900 font-medium"
               >
                 Sign in
               </button>
             </p>
             <button
               onClick={() => { setShowSignup(false); setShowLanding(true); }}
-              className="w-full py-2 text-gray-600 hover:text-gray-800 text-sm"
+              className="w-full py-2 text-teal-600 hover:text-teal-800 text-sm"
             >
               ← Back to home
             </button>
@@ -473,31 +463,67 @@ const App = () => {
     );
   };
 
-  // New Project Modal
+  // New Project Modal - Updated version with fixes
   const NewProjectModal = () => {
+    const [localProject, setLocalProject] = useState({
+      name: '',
+      description: '',
+      status: 'To Do',
+      dueDate: '',
+      teamMembers: []
+    });
+
+    useEffect(() => {
+      if (editingProject) {
+        setLocalProject({
+          name: editingProject.name,
+          description: editingProject.description,
+          status: editingProject.status,
+          dueDate: editingProject.dueDate,
+          teamMembers: editingProject.teamMembers
+        });
+      } else {
+        setLocalProject({
+          name: '',
+          description: '',
+          status: 'To Do',
+          dueDate: '',
+          teamMembers: []
+        });
+      }
+    }, [editingProject, showNewProjectModal]);
+
     const handleSubmit = (e) => {
       e.preventDefault();
-      const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
+      if (editingProject) {
+        const updatedProjects = projects.map(project => 
+          project.id === editingProject.id ? { 
+            ...editingProject,
+            name: localProject.name,
+            description: localProject.description,
+            status: localProject.status,
+            dueDate: localProject.dueDate,
+            teamMembers: localProject.teamMembers
+          } : project
+        );
+        setProjects(updatedProjects);
+        setEditingProject(null);
+      } else {
+        const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
+        
+        const project = {
+          id: newId,
+          name: localProject.name,
+          description: localProject.description,
+          status: localProject.status,
+          dueDate: localProject.dueDate,
+          teamMembers: localProject.teamMembers,
+          managerId: currentUser.id
+        };
+        
+        setProjects([...projects, project]);
+      }
       
-      const project = {
-        id: newId,
-        name: newProject.name,
-        description: newProject.description,
-        status: newProject.status,
-        dueDate: newProject.dueDate,
-        teamMembers: newProject.teamMembers,
-        managerId: currentUser.id
-      };
-      
-      const updatedProjects = [...projects, project];
-      setProjects(updatedProjects);
-      setNewProject({
-        name: '',
-        description: '',
-        status: 'To Do',
-        dueDate: '',
-        teamMembers: []
-      });
       setShowNewProjectModal(false);
     };
 
@@ -505,9 +531,14 @@ const App = () => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Create New Project</h3>
+            <h3 className="text-lg font-semibold text-teal-800">
+              {editingProject ? 'Edit Project' : 'Create New Project'}
+            </h3>
             <button 
-              onClick={() => setShowNewProjectModal(false)}
+              onClick={() => {
+                setShowNewProjectModal(false);
+                setEditingProject(null);
+              }}
               className="text-gray-400 hover:text-gray-500"
             >
               ✕
@@ -515,30 +546,30 @@ const App = () => {
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Project Name</label>
               <input
                 type="text"
-                value={newProject.name}
-                onChange={(e) => setNewProject({...newProject, name: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                value={localProject.name}
+                onChange={(e) => setLocalProject({...localProject, name: e.target.value})}
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Description</label>
               <textarea
-                value={newProject.description}
-                onChange={(e) => setNewProject({...newProject, description: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                value={localProject.description}
+                onChange={(e) => setLocalProject({...localProject, description: e.target.value})}
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 rows="3"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Status</label>
               <select
-                value={newProject.status}
-                onChange={(e) => setNewProject({...newProject, status: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                value={localProject.status}
+                onChange={(e) => setLocalProject({...localProject, status: e.target.value})}
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               >
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
@@ -546,25 +577,25 @@ const App = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Due Date</label>
               <input
                 type="date"
-                value={newProject.dueDate}
-                onChange={(e) => setNewProject({...newProject, dueDate: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                value={localProject.dueDate}
+                onChange={(e) => setLocalProject({...localProject, dueDate: e.target.value})}
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Team Members</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Team Members</label>
               <select
                 multiple
-                value={newProject.teamMembers}
+                value={localProject.teamMembers}
                 onChange={(e) => {
                   const options = [...e.target.selectedOptions];
                   const values = options.map(opt => parseInt(opt.value));
-                  setNewProject({...newProject, teamMembers: values});
+                  setLocalProject({...localProject, teamMembers: values});
                 }}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               >
                 {users.filter(u => u.role === 'Team Member').map(user => (
                   <option key={user.id} value={user.id}>{user.name}</option>
@@ -574,16 +605,19 @@ const App = () => {
             <div className="flex justify-end space-x-3 pt-4">
               <button
                 type="button"
-                onClick={() => setShowNewProjectModal(false)}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                onClick={() => {
+                  setShowNewProjectModal(false);
+                  setEditingProject(null);
+                }}
+                className="px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
               >
-                Create Project
+                {editingProject ? 'Update Project' : 'Create Project'}
               </button>
             </div>
           </form>
@@ -625,7 +659,7 @@ const App = () => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Create New Task</h3>
+            <h3 className="text-lg font-semibold text-teal-800">Create New Task</h3>
             <button 
               onClick={() => setShowNewTaskModal(false)}
               className="text-gray-400 hover:text-gray-500"
@@ -635,11 +669,11 @@ const App = () => {
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Project</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Project</label>
               <select
                 value={newTask.projectId}
                 onChange={(e) => setNewTask({...newTask, projectId: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 required
               >
                 <option value="">Select Project</option>
@@ -649,30 +683,30 @@ const App = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Task Name</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Task Name</label>
               <input
                 type="text"
                 value={newTask.name}
                 onChange={(e) => setNewTask({...newTask, name: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Description</label>
               <textarea
                 value={newTask.description}
                 onChange={(e) => setNewTask({...newTask, description: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 rows="3"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Status</label>
               <select
                 value={newTask.status}
                 onChange={(e) => setNewTask({...newTask, status: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               >
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
@@ -681,20 +715,20 @@ const App = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Due Date</label>
               <input
                 type="date"
                 value={newTask.dueDate}
                 onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Assign To</label>
+              <label className="block text-sm font-medium text-teal-700 mb-1">Assign To</label>
               <select
                 value={newTask.assignedTo}
                 onChange={(e) => setNewTask({...newTask, assignedTo: e.target.value})}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-2 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               >
                 <option value="">Select Team Member</option>
                 {users.filter(u => u.role === 'Team Member').map(user => (
@@ -706,13 +740,13 @@ const App = () => {
               <button
                 type="button"
                 onClick={() => setShowNewTaskModal(false)}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
               >
                 Create Task
               </button>
@@ -765,53 +799,77 @@ const App = () => {
     
     const sentiment = getSentiment();
     
-    // Role-specific analysis templates
-    const analysisTemplates = {
-      Manager: {
-        summary: `From ${user.name}'s leadership perspective: ${text.substring(0, 100)}...`,
-        actionItems: [
-          'Develop strategic roadmap',
-          'Align with business objectives',
-          'Prepare executive summary',
-          'Schedule stakeholder review'
-        ],
-        sentimentDetail: sentiment === 'Positive'
-          ? 'Favorable for business growth'
-          : sentiment === 'Negative'
-            ? 'Requires executive attention'
-            : 'Needs further evaluation'
-      },
-      'Team Member': {
-        summary: `Technical analysis by ${user.name}: ${text.substring(0, 100)}...`,
-        actionItems: [
-          'Create technical specifications',
-          'Document requirements',
-          'Prepare test cases',
-          'Estimate implementation effort'
-        ],
-        sentimentDetail: sentiment === 'Positive'
-          ? 'Technically feasible'
-          : sentiment === 'Negative'
-            ? 'Significant technical challenges'
-            : 'Requires technical assessment'
+    // Generate dynamic action items based on text content
+    const generateActionItems = () => {
+      const actionItems = [];
+      
+      if (text.toLowerCase().includes('meeting')) {
+        actionItems.push('Schedule follow-up meeting');
+        actionItems.push('Distribute meeting minutes');
       }
+      
+      if (text.toLowerCase().includes('client')) {
+        actionItems.push('Prepare client report');
+        actionItems.push('Follow up with client');
+      }
+      
+      if (text.toLowerCase().includes('technical')) {
+        actionItems.push('Review technical specifications');
+        actionItems.push('Assess technical feasibility');
+      }
+      
+      if (text.toLowerCase().includes('budget')) {
+        actionItems.push('Review budget allocation');
+        actionItems.push('Prepare cost analysis');
+      }
+      
+      if (text.toLowerCase().includes('timeline')) {
+        actionItems.push('Update project timeline');
+        actionItems.push('Assess schedule risks');
+      }
+      
+      // Add role-specific action items
+      if (isManager) {
+        actionItems.push('Prepare executive summary');
+        actionItems.push('Align with business objectives');
+      } else {
+        actionItems.push('Document technical requirements');
+        actionItems.push('Assess implementation effort');
+      }
+      
+      // Ensure unique action items
+      return [...new Set(actionItems)];
     };
     
-    // Generate dynamic keywords based on user preferences and text content
-    const dynamicKeywords = [
-      ...user.analysisPreferences.focusAreas,
-      ...(text.toLowerCase().includes('cost') ? ['budget'] : []),
-      ...(text.toLowerCase().includes('technical') ? ['architecture'] : []),
-      ...(text.toLowerCase().includes('client') ? ['requirements'] : [])
-    ].filter((v, i, a) => a.indexOf(v) === i).slice(0, 5); // Unique keywords
+    // Generate dynamic keywords based on text content
+    const generateKeywords = () => {
+      const keywords = [];
+      
+      if (text.toLowerCase().includes('integration')) keywords.push('integration');
+      if (text.toLowerCase().includes('performance')) keywords.push('performance');
+      if (text.toLowerCase().includes('client')) keywords.push('client');
+      if (text.toLowerCase().includes('budget')) keywords.push('budget');
+      if (text.toLowerCase().includes('timeline')) keywords.push('timeline');
+      if (text.toLowerCase().includes('technical')) keywords.push('technical');
+      if (text.toLowerCase().includes('meeting')) keywords.push('meeting');
+      
+      // Add user's focus areas
+      keywords.push(...user.analysisPreferences.focusAreas);
+      
+      // Ensure unique keywords
+      return [...new Set(keywords)].slice(0, 5);
+    };
     
     const mockAnalysis = {
-      summary: analysisTemplates[user.role].summary,
-      keywords: dynamicKeywords,
+      summary: `${isManager ? 'Managerial' : 'Technical'} analysis of the content: ${text.substring(0, 100)}...`,
+      keywords: generateKeywords(),
       sentiment,
-      sentimentDetail: analysisTemplates[user.role].sentimentDetail,
-      actionItems: analysisTemplates[user.role].actionItems.map(item => 
-        isManager ? item : `${item} (technical)`)
+      sentimentDetail: sentiment === 'Positive'
+        ? (isManager ? 'Favorable for business objectives' : 'Technically feasible')
+        : sentiment === 'Negative'
+          ? (isManager ? 'Requires executive attention' : 'Significant technical challenges')
+          : (isManager ? 'Needs further evaluation' : 'Requires technical assessment'),
+      actionItems: generateActionItems()
     };
     
     setAiAnalysis(mockAnalysis);
@@ -845,6 +903,26 @@ const App = () => {
     alert('Task created successfully!');
   };
 
+  // Handle task status change
+  const handleTaskStatusChange = (taskId, newStatus) => {
+    const updatedTasks = tasks.map(task => 
+      task.id === taskId ? { ...task, status: newStatus } : task
+    );
+    setTasks(updatedTasks);
+  };
+
+  // Handle project deletion
+  const handleDeleteProject = (projectId) => {
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      const updatedProjects = projects.filter(project => project.id !== projectId);
+      setProjects(updatedProjects);
+      
+      // Also remove associated tasks
+      const updatedTasks = tasks.filter(task => task.projectId !== projectId);
+      setTasks(updatedTasks);
+    }
+  };
+
   // Dashboard Component
   const Dashboard = () => {
     const visibleProjects = getVisibleProjects();
@@ -856,73 +934,73 @@ const App = () => {
       return (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-teal-100">
               <div className="flex items-center">
-                <div className="bg-blue-500 p-3 rounded-lg">
+                <div className="bg-teal-500 p-3 rounded-lg">
                   <Target className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">Total Projects</p>
-                  <p className="text-2xl font-bold text-gray-900">{visibleProjects.length}</p>
+                  <p className="text-sm text-teal-700">Total Projects</p>
+                  <p className="text-2xl font-bold text-teal-800">{visibleProjects.length}</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-emerald-100">
               <div className="flex items-center">
-                <div className="bg-green-500 p-3 rounded-lg">
+                <div className="bg-emerald-500 p-3 rounded-lg">
                   <CheckCircle className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">Completed Tasks</p>
-                  <p className="text-2xl font-bold text-gray-900">{completedTasks.length}</p>
+                  <p className="text-sm text-emerald-700">Completed Tasks</p>
+                  <p className="text-2xl font-bold text-emerald-800">{completedTasks.length}</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-amber-100">
               <div className="flex items-center">
-                <div className="bg-yellow-500 p-3 rounded-lg">
+                <div className="bg-amber-500 p-3 rounded-lg">
                   <Clock className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">Active Tasks</p>
-                  <p className="text-2xl font-bold text-gray-900">{visibleTasks.filter(t => t.status !== 'Done').length}</p>
+                  <p className="text-sm text-amber-700">Active Tasks</p>
+                  <p className="text-2xl font-bold text-amber-800">{visibleTasks.filter(t => t.status !== 'Done').length}</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-rose-100">
               <div className="flex items-center">
-                <div className="bg-red-500 p-3 rounded-lg">
+                <div className="bg-rose-500 p-3 rounded-lg">
                   <AlertCircle className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">Overdue</p>
-                  <p className="text-2xl font-bold text-gray-900">{overdueTasks.length}</p>
+                  <p className="text-sm text-rose-700">Overdue</p>
+                  <p className="text-2xl font-bold text-rose-800">{overdueTasks.length}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-lg font-semibold mb-4">Team Workload</h3>
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-teal-100">
+              <h3 className="text-lg font-semibold text-teal-800 mb-4">Team Workload</h3>
               <div className="space-y-3">
                 {users.filter(u => u.role === 'Team Member').map(user => {
                   const userTasks = visibleTasks.filter(t => t.assignedTo === user.id && t.status !== 'Done');
                   const progressWidth = Math.min((userTasks.length / 5) * 100, 100);
                   return (
                     <div key={user.id} className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700">{user.name}</span>
+                      <span className="text-sm text-teal-700">{user.name}</span>
                       <div className="flex items-center space-x-2">
-                        <div className="bg-gray-200 rounded-full h-2 w-20">
+                        <div className="bg-teal-100 rounded-full h-2 w-20">
                           <div 
-                            className="bg-blue-500 h-2 rounded-full" 
+                            className="bg-teal-500 h-2 rounded-full" 
                             style={{ width: `${progressWidth}%` }}
                           ></div>
                         </div>
-                        <span className="text-xs text-gray-500">{userTasks.length} tasks</span>
+                        <span className="text-xs text-teal-600">{userTasks.length} tasks</span>
                       </div>
                     </div>
                   );
@@ -930,16 +1008,16 @@ const App = () => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h3 className="text-lg font-semibold mb-4">Recent Projects</h3>
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-teal-100">
+              <h3 className="text-lg font-semibold text-teal-800 mb-4">Recent Projects</h3>
               <div className="space-y-3">
                 {visibleProjects.slice(0, 3).map(project => (
-                  <div key={project.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={project.id} className="flex items-center justify-between p-3 bg-teal-50 rounded-lg">
                     <div>
-                      <p className="font-medium text-gray-900">{project.name}</p>
-                      <p className="text-sm text-gray-500">{project.status}</p>
+                      <p className="font-medium text-teal-800">{project.name}</p>
+                      <p className="text-sm text-teal-600">{project.status}</p>
                     </div>
-                    <span className="text-xs text-gray-500">{project.dueDate}</span>
+                    <span className="text-xs text-teal-500">{project.dueDate}</span>
                   </div>
                 ))}
               </div>
@@ -951,65 +1029,65 @@ const App = () => {
       return (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-teal-100">
               <div className="flex items-center">
-                <div className="bg-blue-500 p-3 rounded-lg">
+                <div className="bg-teal-500 p-3 rounded-lg">
                   <Target className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">My Projects</p>
-                  <p className="text-2xl font-bold text-gray-900">{visibleProjects.length}</p>
+                  <p className="text-sm text-teal-700">My Projects</p>
+                  <p className="text-2xl font-bold text-teal-800">{visibleProjects.length}</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-emerald-100">
               <div className="flex items-center">
-                <div className="bg-green-500 p-3 rounded-lg">
+                <div className="bg-emerald-500 p-3 rounded-lg">
                   <CheckCircle className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold text-gray-900">{completedTasks.length}</p>
+                  <p className="text-sm text-emerald-700">Completed</p>
+                  <p className="text-2xl font-bold text-emerald-800">{completedTasks.length}</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-amber-100">
               <div className="flex items-center">
-                <div className="bg-yellow-500 p-3 rounded-lg">
+                <div className="bg-amber-500 p-3 rounded-lg">
                   <Clock className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">In Progress</p>
-                  <p className="text-2xl font-bold text-gray-900">{visibleTasks.filter(t => t.status === 'In Progress').length}</p>
+                  <p className="text-sm text-amber-700">In Progress</p>
+                  <p className="text-2xl font-bold text-amber-800">{visibleTasks.filter(t => t.status === 'In Progress').length}</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-rose-100">
               <div className="flex items-center">
-                <div className="bg-red-500 p-3 rounded-lg">
+                <div className="bg-rose-500 p-3 rounded-lg">
                   <AlertCircle className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm text-gray-600">Overdue</p>
-                  <p className="text-2xl font-bold text-gray-900">{overdueTasks.length}</p>
+                  <p className="text-sm text-rose-700">Overdue</p>
+                  <p className="text-2xl font-bold text-rose-800">{overdueTasks.length}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border">
-            <h3 className="text-lg font-semibold mb-4">My Tasks</h3>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-teal-100">
+            <h3 className="text-lg font-semibold text-teal-800 mb-4">My Tasks</h3>
             <div className="space-y-3">
               {visibleTasks.slice(0, 5).map(task => (
-                <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={task.id} className="flex items-center justify-between p-3 bg-teal-50 rounded-lg">
                   <div>
-                    <p className="font-medium text-gray-900">{task.name}</p>
-                    <p className="text-sm text-gray-500">{task.status}</p>
+                    <p className="font-medium text-teal-800">{task.name}</p>
+                    <p className="text-sm text-teal-600">{task.status}</p>
                   </div>
-                  <span className="text-xs text-gray-500">{task.dueDate}</span>
+                  <span className="text-xs text-teal-500">{task.dueDate}</span>
                 </div>
               ))}
             </div>
@@ -1030,13 +1108,21 @@ const App = () => {
       setProjects(updatedProjects);
     };
 
+    const handleEditProject = (project) => {
+      setEditingProject(project);
+      setShowNewProjectModal(true);
+    };
+
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">Projects</h2>
+          <h2 className="text-2xl font-bold text-teal-800">Projects</h2>
           <button 
-            onClick={() => setShowNewProjectModal(true)}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-indigo-700"
+            onClick={() => {
+              setEditingProject(null);
+              setShowNewProjectModal(true);
+            }}
+            className="bg-teal-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-teal-700"
           >
             <Plus className="w-4 h-4" />
             <span>New Project</span>
@@ -1045,27 +1131,29 @@ const App = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleProjects.map(project => (
-            <div key={project.id} className="bg-white p-6 rounded-lg shadow-sm border">
+            <div key={project.id} className="bg-white p-6 rounded-lg shadow-sm border border-teal-100">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
-                <select
-                  value={project.status}
-                  onChange={(e) => handleStatusChange(project.id, e.target.value)}
-                  className={`px-2 py-1 text-xs rounded-full ${
-                    project.status === 'Done' ? 'bg-green-100 text-green-800' :
-                    project.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  <option value="To Do">To Do</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Done">Done</option>
-                </select>
+                <h3 className="text-lg font-semibold text-teal-800">{project.name}</h3>
+                <div className="flex space-x-2">
+                  <select
+                    value={project.status}
+                    onChange={(e) => handleStatusChange(project.id, e.target.value)}
+                    className={`px-2 py-1 text-xs rounded-full ${
+                      project.status === 'Done' ? 'bg-emerald-100 text-emerald-800' :
+                      project.status === 'In Progress' ? 'bg-amber-100 text-amber-800' :
+                      'bg-teal-100 text-teal-800'
+                    }`}
+                  >
+                    <option value="To Do">To Do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                  </select>
+                </div>
               </div>
               
-              <p className="text-gray-600 mb-4">{project.description}</p>
+              <p className="text-teal-700 mb-4">{project.description}</p>
               
-              <div className="flex items-center justify-between text-sm text-gray-500">
+              <div className="flex items-center justify-between text-sm text-teal-600">
                 <div className="flex items-center space-x-1">
                   <Users className="w-4 h-4" />
                   <span>{project.teamMembers.length} members</span>
@@ -1075,6 +1163,23 @@ const App = () => {
                   <span>{project.dueDate}</span>
                 </div>
               </div>
+              
+              {currentUser.role === 'Manager' && (
+                <div className="flex justify-end space-x-2 mt-4">
+                  <button
+                    onClick={() => handleEditProject(project)}
+                    className="p-1 text-teal-600 hover:text-teal-800"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteProject(project.id)}
+                    className="p-1 text-rose-600 hover:text-rose-800"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -1089,57 +1194,64 @@ const App = () => {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">Tasks</h2>
+          <h2 className="text-2xl font-bold text-teal-800">Tasks</h2>
           <button 
             onClick={() => setShowNewTaskModal(true)}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-indigo-700"
+            className="bg-teal-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-teal-700"
           >
             <Plus className="w-4 h-4" />
             <span>New Task</span>
           </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm border border-teal-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-teal-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Task</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">Task</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">Project</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">Assigned To</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">Due Date</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-teal-100">
                 {visibleTasks.map(task => {
                   const project = projects.find(p => p.id === task.projectId);
                   const assignedUser = users.find(u => u.id === task.assignedTo);
                   return (
-                    <tr key={task.id} className="hover:bg-gray-50">
+                    <tr key={task.id} className="hover:bg-teal-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{task.name}</div>
-                          <div className="text-sm text-gray-500">{task.description}</div>
+                          <div className="text-sm font-medium text-teal-800">{task.name}</div>
+                          <div className="text-sm text-teal-600">{task.description}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-teal-800">
                         {project?.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-teal-800">
                         {assignedUser?.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          task.status === 'Done' ? 'bg-green-100 text-green-800' :
-                          task.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                          task.status === 'Blocked' ? 'bg-red-100 text-red-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
-                          {task.status}
-                        </span>
+                        <select
+                          value={task.status}
+                          onChange={(e) => handleTaskStatusChange(task.id, e.target.value)}
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            task.status === 'Done' ? 'bg-emerald-100 text-emerald-800' :
+                            task.status === 'In Progress' ? 'bg-amber-100 text-amber-800' :
+                            task.status === 'Blocked' ? 'bg-rose-100 text-rose-800' :
+                            'bg-teal-100 text-teal-800'
+                          }`}
+                        >
+                          <option value="To Do">To Do</option>
+                          <option value="In Progress">In Progress</option>
+                          <option value="Done">Done</option>
+                          <option value="Blocked">Blocked</option>
+                        </select>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-teal-800">
                         {task.dueDate}
                       </td>
                     </tr>
@@ -1215,39 +1327,39 @@ Overall, client is concerned but willing to work together on solutions.`;
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">AI Insights</h2>
+          <h2 className="text-2xl font-bold text-teal-800">AI Insights</h2>
           <div className="flex items-center space-x-2">
-            <Search className="w-5 h-5 text-gray-400" />
-            <span className="text-sm text-gray-600">Analyze meeting notes & feedback</span>
+            <Search className="w-5 h-5 text-teal-600" />
+            <span className="text-sm text-teal-600">Analyze meeting notes & feedback</span>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-lg font-semibold mb-4">Text Analysis</h3>
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-teal-100">
+          <h3 className="text-lg font-semibold text-teal-800 mb-4">Text Analysis</h3>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-teal-700 mb-2">
               Paste meeting notes, client feedback, or other text to analyze:
             </label>
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Paste your text here or upload a document..."
-              className="w-full h-40 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full h-40 p-3 border border-teal-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
           </div>
           
           <div className="flex flex-wrap gap-3 mb-6">
             <button
               onClick={() => setInputText(sampleText)}
-              className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50"
+              className="px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-50"
             >
               Load Sample Text
             </button>
             
             <button
               onClick={() => fileInputRef.current.click()}
-              className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 flex items-center space-x-2"
+              className="px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-50 flex items-center space-x-2"
             >
               <Upload className="w-4 h-4" />
               <span>{uploadedFile ? uploadedFile.name : 'Upload Document'}</span>
@@ -1263,7 +1375,7 @@ Overall, client is concerned but willing to work together on solutions.`;
             <button
               onClick={() => analyzeText(inputText)}
               disabled={!inputText.trim() || isAnalyzing || isUploading}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               {isAnalyzing || isUploading ? (
                 <>
@@ -1280,30 +1392,30 @@ Overall, client is concerned but willing to work together on solutions.`;
           </div>
 
           {aiAnalysis && (
-            <div className="space-y-6 border-t pt-6">
+            <div className="space-y-6 border-t border-teal-200 pt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-blue-900 mb-2">Summary</h4>
-                  <p className="text-blue-800 text-sm">{aiAnalysis.summary}</p>
+                <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                  <h4 className="font-semibold text-teal-800 mb-2">Summary</h4>
+                  <p className="text-teal-700 text-sm">{aiAnalysis.summary}</p>
                 </div>
                 
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-green-900 mb-2">Sentiment</h4>
+                <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
+                  <h4 className="font-semibold text-emerald-800 mb-2">Sentiment</h4>
                   <div>
                     <span className={`px-2 py-1 rounded-full text-xs ${
-                      aiAnalysis.sentiment === 'Positive' ? 'bg-green-200 text-green-800' :
-                      aiAnalysis.sentiment === 'Negative' ? 'bg-red-200 text-red-800' :
-                      'bg-gray-200 text-gray-800'
+                      aiAnalysis.sentiment === 'Positive' ? 'bg-emerald-200 text-emerald-800' :
+                      aiAnalysis.sentiment === 'Negative' ? 'bg-rose-200 text-rose-800' :
+                      'bg-teal-200 text-teal-800'
                     }`}>
                       {aiAnalysis.sentiment}
                     </span>
-                    <p className="text-xs mt-1 text-gray-600">{aiAnalysis.sentimentDetail}</p>
+                    <p className="text-xs mt-1 text-teal-600">{aiAnalysis.sentimentDetail}</p>
                   </div>
                 </div>
               </div>
               
-              <div className="bg-purple-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-purple-900 mb-2">Key Topics</h4>
+              <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                <h4 className="font-semibold text-purple-800 mb-2">Key Topics</h4>
                 <div className="flex flex-wrap gap-2">
                   {aiAnalysis.keywords.map((keyword, index) => (
                     <span key={index} className="px-2 py-1 bg-purple-200 text-purple-800 rounded-full text-xs">
@@ -1313,15 +1425,15 @@ Overall, client is concerned but willing to work together on solutions.`;
                 </div>
               </div>
               
-              <div className="bg-yellow-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-yellow-900 mb-3">Action Items</h4>
+              <div className="bg-amber-50 p-4 rounded-lg border border-amber-100">
+                <h4 className="font-semibold text-amber-800 mb-3">Action Items</h4>
                 <div className="space-y-2">
                   {aiAnalysis.actionItems.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-white rounded border">
-                      <span className="text-sm text-gray-800">{item}</span>
+                    <div key={index} className="flex items-center justify-between p-2 bg-white rounded border border-teal-100">
+                      <span className="text-sm text-teal-800">{item}</span>
                       <div className="flex space-x-2">
                         <select 
-                          className="text-xs border rounded px-2 py-1"
+                          className="text-xs border border-teal-300 rounded px-2 py-1 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                           onChange={(e) => convertToTask(item, e.target.value)}
                         >
                           <option value="">Select Project</option>
@@ -1335,13 +1447,13 @@ Overall, client is concerned but willing to work together on solutions.`;
                 </div>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-2">Your Recent Analyses</h4>
+              <div className="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                <h4 className="font-semibold text-teal-800 mb-2">Your Recent Analyses</h4>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {analysisHistory.slice(0, 3).map((item, index) => (
-                    <div key={index} className="p-2 bg-white rounded border">
-                      <p className="text-sm font-medium truncate">{item.input.substring(0, 60)}...</p>
-                      <p className="text-xs text-gray-500">
+                    <div key={index} className="p-2 bg-white rounded border border-teal-100">
+                      <p className="text-sm font-medium text-teal-800 truncate">{item.input.substring(0, 60)}...</p>
+                      <p className="text-xs text-teal-500">
                         {new Date(item.timestamp).toLocaleString()}
                       </p>
                     </div>
@@ -1369,27 +1481,25 @@ Overall, client is concerned but willing to work together on solutions.`;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-teal-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b border-teal-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <div className="bg-indigo-600 w-8 h-8 rounded-lg flex items-center justify-center">
-                <Target className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-xl font-bold text-gray-900">StratOS Consulting Platform</h1>
+              <img src={STRATOSLOGO} alt="StratOS Logo" className="h-8 w-auto" />
+              <h1 className="text-xl font-bold text-teal-800">StratOS Consulting Platform</h1>
             </div>
             
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <User className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-700">{currentUser.name}</span>
-                <span className="text-xs text-gray-500">({currentUser.role})</span>
+                <User className="w-4 h-4 text-teal-600" />
+                <span className="text-sm text-teal-700">{currentUser.name}</span>
+                <span className="text-xs text-teal-500">({currentUser.role})</span>
               </div>
               <button
                 onClick={() => { setCurrentUser(null); setShowLanding(true); }}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-teal-600 hover:text-teal-800"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -1407,8 +1517,8 @@ Overall, client is concerned but willing to work together on solutions.`;
               onClick={() => setActiveTab(tab)}
               className={`pb-2 text-sm font-medium border-b-2 ${
                 activeTab === tab
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'border-teal-500 text-teal-600'
+                  : 'border-transparent text-teal-500 hover:text-teal-700'
               }`}
             >
               {tab === 'ai-insights' ? 'AI Insights' : tab.charAt(0).toUpperCase() + tab.slice(1)}
